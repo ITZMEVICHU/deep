@@ -58,8 +58,9 @@ def Classification_models(vAR_input_model_type):
             
             # Data Preprocessing for Training Data
             label_encoder = LabelEncoder()
-            training_data['EducationalStatus'] = label_encoder.fit_transform(training_data['EducationalStatus'])
             training_data['Gender'] = label_encoder.fit_transform(training_data['Gender'])
+            training_data['EducationalStatus'] = label_encoder.fit_transform(training_data['EducationalStatus'])
+           
             
             scaler = StandardScaler()
             numerical_cols = ['earnings', 'Savings', 'earning_potential']
