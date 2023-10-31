@@ -33,9 +33,9 @@ st.markdown("<p style='text-align: center; color: black; font-size:20px;'><span 
 st.markdown("<hr style=height:2.5px;margin-top:0px;background-color:gray;>",unsafe_allow_html=True)
 
 with st.sidebar:
-  
-    Gcp_cloud = st.selectbox("",
-                     ["GCP Services Used","VM Instance","Computer Engine","Cloud Storage"],key='text2')
+    Library = st.selectbox("",
+                     ["Library Used","Streamlit","Image","Pandas","Requests"],key='text1')
+    
     st.markdown("## ")
     href = """<form action="#">
             <input type="submit" value="Clear/Reset" />
