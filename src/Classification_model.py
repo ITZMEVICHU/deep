@@ -2,10 +2,11 @@ import streamlit as st
 import pandas as pd
 import shap
 import matplotlib.pyplot as plt 
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import PolynomialFeatures
 
 def explain_model(model, X_test):
     # Create a SHAP explainer object
@@ -42,8 +43,8 @@ def Classification_models(vAR_input_model_type):
         vAR_input_training_data = st.file_uploader(' ',key='train')
         if vAR_input_training_data is not None:
             try:
-                training_data = pd.read_excel(vAR_input_training_data)
-                fs=training_data.drop(['Churn'], axis=1)
+                training_data = pd.read_csv(vAR_input_training_data)  # Change this to read_csv
+                fs=training_data.drop(['spending_limit'], axis=1)  # Change 'spending_limit' to your target column name
                 colunms=fs.columns.values
             except BaseException as er:
                 st.warning("Upload the correct training dataset")
@@ -57,116 +58,51 @@ def Classification_models(vAR_input_model_type):
                         st.write(training_data)
             
             # Data Preprocessing for Training Data
-            training_data['Purchase Date'] = pd.to_datetime(training_data['Purchase Date'], format='%m%d%Y')
-            label_encoder = LabelEncoder()
-            training_data['Product'] = label_encoder.fit_transform(training_data['Product'])
-            training_data['Gender'] = label_encoder.fit_transform(training_data['Gender'])
+            X = training_data[["earnings", "Savings"]]  # Change to your feature columns
+            y = training_data["spending_limit"]  # Change to your target column
+
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=34)
 
             scaler = StandardScaler()
-            numerical_cols = ['Quantity', 'Price', 'Service Call', 'Service Failure Rate%', 'Customer Lifetime(Days)']
-            training_data[numerical_cols] = scaler.fit_transform(training_data[numerical_cols])
+            X_train_scaled = scaler.fit_transform(X_train)
+            X_test_scaled = scaler.transform(X_test)
 
-            # Separating features and target variable for Training Data
-            X_train = training_data.drop(['CustomerID', 'Purchase Date', 'Service Start Date', 'Churn'], axis=1)
-            y_train = training_data['Churn']
+            poly = PolynomialFeatures(degree=2)
+            X_train_poly = poly.fit_transform(X_train_scaled)
+            X_test_poly = poly.transform(X_test_scaled)
 
-            # Model Selection
-            if vAR_input_model_type == 'Decision Trees':
-                rf_classifier = DecisionTreeClassifier(random_state=42)
-            elif vAR_input_model_type == 'Random Forest':
-                rf_classifier = RandomForestClassifier(random_state=42)
-            rf_classifier.fit(X_train, y_train)
+            model = LinearRegression()
+            model.fit(X_train_poly, y_train)
 
-            # Feature selection
-            with col111:
+            y_pred_test = model.predict(X_test_poly)
+
+            mse = mean_squared_error(y_test, y_pred_test)
+            r2 = r2_score(y_test, y_pred_test)
+
+            st.write("Mean Squared Error:", mse)
+            st.write("R-squared:", r2)
+
+            with col44:
+                st.write("")
+                if st.button("Test the Model"):
+                    st.success("Testing Process Completed")
+            with col5:
                 st.write("# ")
-                st.markdown("<p style='text-align: left; color: black; font-size:20px;'><span style='font-weight: bold'>Feature Selection</span></p>", unsafe_allow_html=True)
-            with col222:
-                vAR_input_feature_selection = st.multiselect(' ',colunms,key='fetureselection')
-            if vAR_input_feature_selection != []:
-                with w222:
-                    st.write("# ")
-                    # st.write("# ")
-                    # st.write("# ")
-                    if st.button("Extract"):
-                        with col222:
-                            st.success("Extracted successfully")
-            # Hyper parameter
-            if vAR_input_feature_selection != []:
-                with hy2:
-                    st.write("# ")
-                    st.write("# ")
-                    st.markdown("<p style='text-align: left; color: black; font-size:20px;'><span style='font-weight: bold'>Hyper Parameter</span></p>", unsafe_allow_html=True)
-                with hy3:
-                    st.write("# ")
-                    random=st.number_input("Random state",value=42,step=3,min_value=10,max_value=90)
-                with hy4:
-                    st.write("# ")
-                    hyper = st.selectbox('Method',["Select","Entropy","Gini"],key='hyper')
-                if hyper != "Select":
-                    with tr3:
-                        st.write("# ")
-                        if st.button("Train the Model"):
-                            st.success("Training Process Completed")
-                    
-                    # Model Testing
-                    with col1111:
-                        st.write("### ")
-                        st.write("## ")
-                        st.markdown("<p style='text-align: left; color: black; font-size:20px;'><span style='font-weight: bold'>Test data upload</span></p>", unsafe_allow_html=True)
-                    with col2222:
-                        vAR_input_test_data = st.file_uploader(' ',key='test')
-                    if vAR_input_test_data is not None:
-                        try:
-                            testing_data = pd.read_excel(vAR_input_test_data)
-                            with w2222:
-                                st.write("### ")
-                                st.write("## ")
-                                if st.button("Preview",key="prev1"):
-                                    with cc11:
-                                        st.write("# ")
-                                        st.write(testing_data)
+                st.markdown("<p style='text-align: left; color: black; font-size:20px;'><span style='font-weight: bold'>Result</span></p>", unsafe_allow_html=True)
                             
-                            
-                            show_testing_data = pd.read_excel(vAR_input_test_data)
-                            
-                            # Data Preprocessing for Testing Data
-                            testing_data['Product'] = label_encoder.fit_transform(testing_data['Product'])
-                            testing_data['Gender'] = label_encoder.fit_transform(testing_data['Gender'])
-                            testing_data[numerical_cols] = scaler.transform(testing_data[numerical_cols])
-
-                            # Removing unwanted columns from Testing Data
-                            X_test = testing_data.drop(['CustomerID', 'Purchase Date', 'Service Start Date', 'Reason for The customer to Churn / Non Churn'], axis=1)
-
-                            # Predicting the target variable for Testing Data
-                            y_pred_test = rf_classifier.predict(X_test)
-                        except:
-                            with ee3:
-                                st.warning("Upload correct testing dataset")
-                        else:
-                            with col44:
-                                st.write("")
-                                if st.button("Test the Model"):
-                                    st.success("Testing Process Completed")
-                            with col5:
+            # Model Prediction
+            with col55:
+                result=st.selectbox("",["Select","Model Outcome","Explainable AI"])
+                if result != "Select":
+                    st.write("")
+                    if st.button("Submit"):
+                        if result == "Model Outcome":
+                            with cc111:
+                                selected_feature = show_testing_data[vAR_input_feature_selection]
+                                selected_feature['Predicted'] = y_pred_test
                                 st.write("# ")
-                                st.markdown("<p style='text-align: left; color: black; font-size:20px;'><span style='font-weight: bold'>Result</span></p>", unsafe_allow_html=True)
-                            
-                            # Model Prediction
-                            with col55:
-                                result=st.selectbox("",["Select","Model Outcome","Explainable AI"])
-                                if result != "Select":
-                                    st.write("")
-                                    if st.button("Submit"):
-                                        if result == "Model Outcome":
-                                            with cc111:
-                                                selected_feature = show_testing_data[vAR_input_feature_selection]
-                                                selected_feature['Predicted'] = y_pred_test
-                                                st.write("# ")
-                                                st.write(selected_feature)
-                                        # Explainable AI
-                                        with col55:
-                                            if result =="Explainable AI":
-                                                with ex2:
-                                                    explain_model(rf_classifier, X_test)  # Assuming rf_classifier is your trained model
-                            
+                                st.write(selected_feature)
+                        # Explainable AI
+                        with ex2:
+                            if result =="Explainable AI":
+                                explain_model(model, X_test_poly)  # Assuming model is your trained model
