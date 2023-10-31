@@ -140,7 +140,7 @@ def Classification_models(vAR_input_model_type):
                             y_pred_test = rf_classifier.predict(X_test)
 
                     
-                        else:
+                     else:
                             with col44:
                                 st.write("")
                                 if st.button("Test the Model"):
