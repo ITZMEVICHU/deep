@@ -134,8 +134,9 @@ def Classification_models(vAR_input_model_type):
                             X_test = testing_data[['earnings', 'Savings', 'earning_potential']]
 
                             y_pred_test = rf_classifier.predict(X_test)
-                         except:
-                            with ee3:
+                        
+                        except:
+                             with ee3:
                                 st.warning("Upload correct testing dataset")
                     else:
                         with col44:
