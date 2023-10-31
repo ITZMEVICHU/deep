@@ -67,7 +67,7 @@ def Classification_models(vAR_input_model_type):
             training_data[numerical_cols] = scaler.fit_transform(training_data[numerical_cols])
 
             # Separating features and target variable for Training Data
-            X_train = training_data.drop(['CustomerID','Age','Gender','HistoricalSpending','CreditScore','Product','spending_limit'], axis=1)
+            X_train = training_data.drop(['CustomerID','HistoricalSpending','CreditScore','spending_limit'], axis=1)
             y_train = training_data['spending_limit']
 
             # Model Selection
@@ -136,7 +136,7 @@ def Classification_models(vAR_input_model_type):
                             testing_data[numerical_cols] = scaler.transform(testing_data[numerical_cols])
 
                             # Removing unwanted columns from Testing Data
-                            X_test = testing_data['earnings']
+                            X_test = training_data.drop(['CustomerID','HistoricalSpending','CreditScore','spending_limit'], axis=1)
 
                             # Predicting the target variable for Testing Data
                             y_pred_test = rf_classifier.predict(X_test)
