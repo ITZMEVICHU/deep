@@ -43,7 +43,7 @@ def Classification_models(vAR_input_model_type):
         if vAR_input_training_data is not None:
             try:
                 training_data = pd.read_excel(vAR_input_training_data)
-                fs=training_data.drop(['Churn'], axis=1)
+                fs=training_data.drop(['spending_limit'], axis=1)
                 colunms=fs.columns.values
             except BaseException as er:
                 st.warning("Upload the correct training dataset")
@@ -57,18 +57,14 @@ def Classification_models(vAR_input_model_type):
                         st.write(training_data)
             
             # Data Preprocessing for Training Data
-            training_data['Purchase Date'] = pd.to_datetime(training_data['Purchase Date'], format='%m%d%Y')
-            label_encoder = LabelEncoder()
-            training_data['Product'] = label_encoder.fit_transform(training_data['Product'])
-            training_data['Gender'] = label_encoder.fit_transform(training_data['Gender'])
-
+            
             scaler = StandardScaler()
-            numerical_cols = ['Quantity', 'Price', 'Service Call', 'Service Failure Rate%', 'Customer Lifetime(Days)']
+            numerical_cols = ['earnings', 'Savings', 'earning_potential']
             training_data[numerical_cols] = scaler.fit_transform(training_data[numerical_cols])
 
             # Separating features and target variable for Training Data
-            X_train = training_data.drop(['CustomerID', 'Purchase Date', 'Service Start Date', 'Churn'], axis=1)
-            y_train = training_data['Churn']
+            X_train = training_data.drop(['CustomerID','Age','Gender','Location','HistoricalSpending','CreditScore','EducationalStatus'], axis=1)
+            y_train = training_data['spending_limit']
 
             # Model Selection
             if vAR_input_model_type == 'Decision Trees':
