@@ -135,11 +135,10 @@ def Classification_models(vAR_input_model_type):
                             testing_data['Gender'] = label_encoder.fit_transform(testing_data['Gender'])
                             testing_data[numerical_cols] = scaler.transform(testing_data[numerical_cols])
 
-                            # Removing unwanted columns from Testing Data
-                            X_test = testing_data(['earnings', 'Savings', 'earning_potential'], axis=1)
+                            X_test = testing_data[['earnings', 'Savings', 'earning_potential']]
 
-                            # Predicting the target variable for Testing Data
                             y_pred_test = rf_classifier.predict(X_test)
+
                         except:
                             with ee3:
                                 st.warning("Upload correct testing dataset")
