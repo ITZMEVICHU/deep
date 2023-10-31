@@ -58,6 +58,7 @@ def Classification_models(vAR_input_model_type):
             
             # Data Preprocessing for Training Data
             label_encoder = LabelEncoder()
+            training_data['Product'] = label_encoder.fit_transform(training_data['Product'])
             training_data['Gender'] = label_encoder.fit_transform(training_data['Gender'])
         
             
@@ -66,7 +67,7 @@ def Classification_models(vAR_input_model_type):
             training_data[numerical_cols] = scaler.fit_transform(training_data[numerical_cols])
 
             # Separating features and target variable for Training Data
-            X_train = training_data.drop(['CustomerID','Age','Gender','Location','HistoricalSpending','CreditScore','EducationalStatus'], axis=1)
+            X_train = training_data.drop(['CustomerID','Age','Gender','HistoricalSpending','CreditScore','Product'], axis=1)
             y_train = training_data['spending_limit']
 
             # Model Selection
