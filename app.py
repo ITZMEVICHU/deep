@@ -36,7 +36,6 @@ with st.sidebar:
     
     st.markdown("## ")
     
-    st.sidebar.markdown(href, unsafe_allow_html=True)
     st.markdown("# ")
     st.markdown("# ")
     st.markdown("# ")
