@@ -136,7 +136,7 @@ def Classification_models(vAR_input_model_type):
                             testing_data[numerical_cols] = scaler.transform(testing_data[numerical_cols])
 
                             # Removing unwanted columns from Testing Data
-                            X_test = testing_data.drop(['spending_limit'], axis=1)
+                            X_test = testing_data.drop(['CustomerID','Age','Gender','HistoricalSpending','CreditScore','Product'], axis=1)
 
                             # Predicting the target variable for Testing Data
                             y_pred_test = rf_classifier.predict(X_test)
