@@ -138,14 +138,14 @@ def Classification_models(vAR_input_model_type):
                         except:
                              with ee3:
                                 st.warning("Upload correct testing dataset")
-                    else:
-                        with col44:
-                            st.write("")
-                            if st.button("Test the Model"):
-                                st.success("Testing Process Completed")
-                        with col5:
-                             st.write("# ")
-                             st.markdown("<p style='text-align: left; color: black; font-size:20px;'><span style='font-weight: bold'>Result</span></p>", unsafe_allow_html=True)
+                        else:
+                             with col44:
+                                st.write("")
+                                if st.button("Test the Model"):
+                                   st.success("Testing Process Completed")
+                             with col5:
+                                   st.write("# ")
+                                   st.markdown("<p style='text-align: left; color: black; font-size:20px;'><span style='font-weight: bold'>Result</span></p>", unsafe_allow_html=True)
                     
                     # Model Prediction
                     with col55:
