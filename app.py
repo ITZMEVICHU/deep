@@ -30,8 +30,7 @@ with imcol2:
 with imcol3:
     st.write("")
 
-st.markdown("<p style='text-align: center; color: black; font-size:23px;'><span style='font-weight: bold'>Learn to Build Industry Standard Data Science Applications</span></p>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: blue; margin-top: -10px; font-size:20px;'><span style='font-weight: bold'>MLOPS Built On Google Cloud and Streamlit</span></p>", unsafe_allow_html=True)
+
 st.markdown("<p style='text-align: center; color: black; font-size:20px;'><span style='font-weight: bold'>Problem Statement: Develop a Retail Machine Learning Applications (MLOPS): Customer Churn: Who is Going to Churn, When the Churn will Occur, Why it Occurs, and How to Prevent?</span></p>", unsafe_allow_html=True)
 st.markdown("<hr style=height:2.5px;margin-top:0px;background-color:gray;>", unsafe_allow_html=True)
 
