@@ -33,16 +33,23 @@ st.markdown("<p style='text-align: center; color: black; font-size:20px;'><span 
 st.markdown("<hr style=height:2.5px;margin-top:0px;background-color:gray;>",unsafe_allow_html=True)
 
 with st.sidebar:
-    
+    selected = st.selectbox("",['Machine Learning'],key='text')
+    Library = st.selectbox("",
+                     ["Library Used","Streamlit","Image","Pandas","Requests"],key='text1')
+    Gcp_cloud = st.selectbox("",
+                     ["GCP Services Used","VM Instance","Computer Engine","Cloud Storage"],key='text2')
     st.markdown("## ")
-    
+    href = """<form action="#">
+            <input type="submit" value="Clear/Reset" />
+            </form>"""
+    st.sidebar.markdown(href, unsafe_allow_html=True)
     st.markdown("# ")
     st.markdown("# ")
     st.markdown("# ")
     st.markdown("# ")
     st.markdown("# ")
-    st.markdown("<p style='text-align: center; color: White; font-size:20px;'>Build & Deployed on<span style='font-weight: bold'></span></p>", unsafe_allow_html=True)
    
+
 
 #--------------function calling-----------#
 if __name__ == "__main__":
